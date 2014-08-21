@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 from tempfile import mkstemp
 from shutil import move
 from os import remove, close
@@ -21,9 +22,13 @@ def number_references(file_str):
     is_bibliography = False
 
     try:
-        fh, abs_path = mkstemp()
-        new_file = open(abs_path, 'w')
-        old_file = open(file_str)
+        if file_str == "-":
+            new_file = sys.stdout
+            old_file = sys.stdin
+        else:
+            fh, abs_path = mkstemp()
+            new_file = open(abs_path, 'w')
+            old_file = open(file_str)
     except:
         print "Error: couldn't find file. Aborting."
         traceback.print_exc(file=sys.stdout)
@@ -97,29 +102,22 @@ def number_references(file_str):
         line = bib_buffer[curr_ref]
         new_file.write(line)
 
-    #close temp file
-    new_file.close()
-    close(fh)
-    old_file.close()
-    #Remove original file
-    remove(file_str)
-    #Move new file
-    move(abs_path, file_str)
+    if file_str != "-":
+        #close temp file
+        new_file.close()
+        close(fh)
+        old_file.close()
+        #Remove original file
+        remove(file_str)
+        #Move new file
+        move(abs_path, file_str)
 
 def main():
     parser = argparse.ArgumentParser(description='sort out your references')
-    parser.add_argument('-f','--file', type=str, help='file to sort out')
+    parser.add_argument('-f','--file', type=str,required=True, help='file to sort out')
     args = parser.parse_args()
 
-    file_str = args.file
-
-    if (not file_str):
-        print "Error: must specify a file to sort out. Aborting."
-        return
-
-    number_references(file_str)
-    print "done!"
-
+    number_references(args.file)
 
 if __name__ == "__main__":
     main()
