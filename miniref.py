@@ -119,5 +119,7 @@ def main():
 
     number_references(args.file)
 
+    print "done!"
+
 if __name__ == "__main__":
     main()
