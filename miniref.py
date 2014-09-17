@@ -43,7 +43,7 @@ def number_references(file_str):
 
         # reached end of e-mail, bring on the bibliography
         if (re.search(standard_signatures, line)):
-            print("found text ending at: ", line, file=sys.stderr)
+            print("found text ending at: ", line.strip("\n"), file=sys.stderr)
             is_bibliography = True
             print("setting up bibliography...", file=sys.stderr)
 
