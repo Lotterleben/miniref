@@ -37,10 +37,12 @@ def number_references(file_str):
     print >> sys.stderr, "counting references..."
 
     for line in old_file:
+        if ("TODO" in line):
+            print >> sys.stderr, "Caution: found a TODO:\n\t", line
 
         # reached end of e-mail, bring on the bibliography
         if (re.search(standard_signatures, line)):
-            print >> sys.stderr, "found text ending at: ", line
+            print >> sys.stderr, "found text ending at: ", line.strip("\n")
             is_bibliography = True
             print >> sys.stderr, "setting up bibliography..."
 
@@ -49,7 +51,6 @@ def number_references(file_str):
 
         # still sifting though text, substitute placeholder markers with proper ones
         if (not is_bibliography):
-
             for marker in markers:
                 try:
                     ref_registry[marker]
