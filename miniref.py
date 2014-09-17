@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 from tempfile import mkstemp
 from shutil import move
 from os import remove, close
@@ -30,21 +31,21 @@ def number_references(file_str):
             new_file = open(abs_path, 'w')
             old_file = open(file_str)
     except:
-        print >> sys.stderr, "Error: couldn't find file. Aborting."
+        print("Error: couldn't find file. Aborting.", file=sys.stderr)
         traceback.print_exc(file=sys.stdout)
         return
 
-    print >> sys.stderr, "counting references..."
+    print("counting references...", file=sys.stderr)
 
     for line in old_file:
         if ("TODO" in line):
-            print >> sys.stderr, "Caution: found a TODO:\n\t", line
+            print( "Caution: found a TODO:\n\t", line, file=sys.stderr)
 
         # reached end of e-mail, bring on the bibliography
         if (re.search(standard_signatures, line)):
-            print >> sys.stderr, "found text ending at: ", line.strip("\n")
+            print("found text ending at: ", line, file=sys.stderr)
             is_bibliography = True
-            print >> sys.stderr, "setting up bibliography..."
+            print("setting up bibliography...", file=sys.stderr)
 
         # TODO: make this work for digits >9 as well
         markers = re.findall("(\[[^\[\]]\])", line)
@@ -54,7 +55,7 @@ def number_references(file_str):
             for marker in markers:
                 try:
                     ref_registry[marker]
-                    print >> sys.stderr, "Error: duplicate marker: ", marker
+                    print("Error: duplicate marker: ", marker, file=sys.stderr)
                     return
                 except:
                     new_ref = "[%i]" % ref_counter
@@ -94,7 +95,7 @@ def number_references(file_str):
                         prev_ref_number = new_ref
 
                     except:
-                        print >> sys.stderr, "Warning: removing reference with unknown marker: ", marker
+                        print("Warning: removing reference with unknown marker: ", marker, file=sys.stderr)
                         new_file.write(line.replace(marker, ""))
 
     # sort references in "bibliography" and write to file
@@ -120,7 +121,7 @@ def main():
 
     number_references(args.file)
 
-    print "done!"
+    print("done!")
 
 if __name__ == "__main__":
     main()
