@@ -54,14 +54,18 @@ def number_references(file_str):
         if (not is_bibliography):
             for marker in markers:
                 try:
-                    ref_registry[marker]
-                    print("Error: duplicate marker: ", marker, file=sys.stderr)
-                    return
+                    # refs may be used more than once, but warn just in case.
+                    ref_no = ref_registry[marker]
+                    print("Warning: duplicate marker %s in line" % marker, file=sys.stderr)
+                    print("\t%s" % line, file=sys.stderr)
+                    line = line.replace(marker, ref_no)
+
                 except:
                     new_ref = "[%i]" % ref_counter
                     ref_registry[marker] = new_ref
                     ref_counter += 1
                     line = line.replace(marker, new_ref)
+
             # save (possibly altered) line
             new_file.write(line)
 
@@ -80,6 +84,7 @@ def number_references(file_str):
                     prev_line += line
                     #store
                     bib_buffer[prev_ref_number] = prev_line
+
                 except KeyError:
                     # we probably just caught the signature or so. Put it back.
                     new_file.write(line)
@@ -91,6 +96,11 @@ def number_references(file_str):
                     try:
                         new_ref = ref_registry[marker]
                         line = line.replace(marker, new_ref)
+
+                        if (new_ref in bib_buffer):
+                            print("Error: duplicate marker in bibliography: ", marker, file=sys.stderr)
+                            return
+
                         bib_buffer[new_ref] = line
                         prev_ref_number = new_ref
 
