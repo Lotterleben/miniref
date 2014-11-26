@@ -8,6 +8,14 @@ Write what you need to say into a text file. Mark each reference with ``[x]`` in
 
 ``x`` can be any alphanumerical character or special character except for ``[`` or ``]``. 
 
+The current supported signatures are:
+	With kind regards
+	Cheers
+	Regards
+	So long and thanks for all the fish
+
+If you use a different one, just open an issue. :)
+
 You can find an example of what a compatible file should look like in ```example.txt```.
 
 Then, run
