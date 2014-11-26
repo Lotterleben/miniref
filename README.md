@@ -9,6 +9,7 @@ Write what you need to say into a text file. Mark each reference with ``[x]`` in
 ``x`` can be any alphanumerical character or special character except for ``[`` or ``]``. 
 
 The current supported signatures are:
+	
 	With kind regards
 	Cheers
 	Regards
