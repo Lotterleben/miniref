@@ -48,7 +48,7 @@ def number_references(file_str):
             print("setting up bibliography...", file=sys.stderr)
 
         # TODO: make this work for digits >9 as well
-        markers = re.findall("(\[[^\[\]]\])", line)
+        markers = re.findall("(\[\^[^\[\]]\])", line)
 
         # still sifting though text, substitute placeholder markers with proper ones
         if (not is_bibliography):
@@ -61,7 +61,7 @@ def number_references(file_str):
                     line = line.replace(marker, ref_no)
 
                 except:
-                    new_ref = "[%i]" % ref_counter
+                    new_ref = "[^%i]" % ref_counter
                     ref_registry[marker] = new_ref
                     ref_counter += 1
                     line = line.replace(marker, new_ref)
@@ -110,7 +110,7 @@ def number_references(file_str):
 
     # sort references in "bibliography" and write to file
     for i in range (1, len(bib_buffer)+1):
-        curr_ref = "[%i]" % i
+        curr_ref = "[^%i]" % i
         line = bib_buffer[curr_ref]
         new_file.write(line)
 
