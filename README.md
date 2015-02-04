@@ -21,6 +21,6 @@ You can find an example of what a compatible file should look like in ```example
 
 Then, run
 
-	python miniref-py -f path/to/your/textfile.txt
+	python miniref.py -f path/to/your/textfile.txt
 
 Afterwards, your references in ``textfile.txt`` should be numbered neatly.
