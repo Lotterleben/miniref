@@ -73,7 +73,7 @@ def number_references(file_str):
             print("setting up bibliography...", file=sys.stderr)
 
         # TODO: make this work for digits >9 as well
-        markers = re.findall("(\[\^[^\[\]]\])", line)
+        markers = re.findall("(\[\^[^\[\]]+\])", line)
 
         # still sifting though text, substitute placeholder markers with proper ones
         if (not is_bibliography):
