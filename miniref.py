@@ -76,25 +76,44 @@ def number_references(file_str):
 
         # still sifting though text, substitute placeholder markers with proper ones
         if (not is_bibliography):
+            marker_index = 0
+            rest = line
+            new_line = ""
+
             for marker in markers:
+                # If the line has multiple markers,
+                # use only the chunk from this marker to the next.
+                # this is to prevent newly created new_ref s from replacing
+                # valid other new_ref s occuring earlier in the line 
+                # if those realier new_refs happen to have the same value as marker.
+
+                chunk, rest = rest.split(marker)
+                chunk += marker # that split just removed our marker. :( re-add it.
+
                 try:
                     # refs may be used more than once, but warn just in case.
                     ref_no = ref_registry[marker]
                     print("Warning: duplicate marker %s in line" % marker, file=sys.stderr)
                     print("\t%s" % line, file=sys.stderr)
-                    line = line.replace(marker, ref_no)
+                    chunk = chunk.replace(marker, ref_no)
 
                 except:
                     new_ref = "[^%i]" % ref_counter
                     ref_registry[marker] = new_ref
                     ref_counter += 1
-                    line = line.replace(marker, new_ref)
+                    chunk = chunk.replace(marker, new_ref) 
+    
+                marker_index += 1
+                new_line += chunk
+
+            new_line += rest
 
             # save (possibly altered) line
-            new_file.write(line)
+            new_file.write(new_line)
 
         # working on actual references, match proper substitutes from text
         elif (is_bibliography):
+
             # check if line is ended by \n, correct if it is not
             if (line[-1] != "\n"):
                 line += "\n"
@@ -113,6 +132,7 @@ def number_references(file_str):
                     # we probably just caught the signature or so. Put it back.
                     new_file.write(line)
                     pass
+
 
             # beginning of a new ref
             else:
