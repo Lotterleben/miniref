@@ -6,7 +6,7 @@ Write what you need to say into a text file. Mark each reference with ``[^x]`` i
 	[^x] http://zombietetris.de. The reference
 	    may span across several lines.
 
-``x`` can be any alphanumerical character or special character except for ``[`` or ``]``.
+``x`` can be any single alphanumerical character or special character except for ``[`` or ``]``.
 
 The current supported signatures are:
 
